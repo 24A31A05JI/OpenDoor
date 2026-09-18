@@ -4,7 +4,7 @@ An opportunity discovery platform designed to help students and job seekers disc
 
 ## 🚀 Live Demo
 
-👉 [Visit OpenDoor – Opportunity Hub](https://opportunity-hub--hasikavasavi176.replit.app/)
+👉 https://24a31a05ji.github.io/OpenDoor/
 
 ## ✨ Features
 
