@@ -1,0 +1,86 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /applications/notify:
+    post:
+      operationId: notifyApplicationSubmission
+      tags: [applications]
+      summary: Send an application confirmation email
+      description: Sends a confirmation email after a user starts an external opportunity application.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApplicationNotifyInput"
+      responses:
+        "200":
+          description: Confirmation email accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApplicationNotifyResponse"
+        "400":
+          description: Invalid request
+        "502":
+          description: Email provider error
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    ApplicationNotifyInput:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        opportunityTitle:
+          type: string
+          minLength: 1
+        company:
+          type: string
+          minLength: 1
+        applicationUrl:
+          type: string
+          format: uri
+      required:
+        - email
+        - opportunityTitle
+        - company
+        - applicationUrl
+    ApplicationNotifyResponse:
+      type: object
+      properties:
+        sent:
+          type: boolean
+      required:
+        - sent
+
