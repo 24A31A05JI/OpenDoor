@@ -258,21 +258,25 @@ function Home() {
         status: 'In progress',
       };
       setApplications((current) => [record, ...current]);
-      void fetch('/api/applications/notify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: accountEmail,
-          opportunityTitle: item.title,
-          company: item.company,
-          applicationUrl: item.applicationUrl,
-        }),
-      }).then((response) => {
-        if (!response.ok) throw new Error('Email was not accepted');
-        announce('Application saved — confirmation sent to your email');
-      }).catch(() => {
-        announce('Application saved as in progress; email confirmation could not be sent');
-      });
+      if (import.meta.env.VITE_STATIC_HOSTING !== 'true') {
+        void fetch('/api/applications/notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: accountEmail,
+            opportunityTitle: item.title,
+            company: item.company,
+            applicationUrl: item.applicationUrl,
+          }),
+        }).then((response) => {
+          if (!response.ok) throw new Error('Email was not accepted');
+          announce('Application saved — confirmation sent to your email');
+        }).catch(() => {
+          announce('Application saved as in progress; email confirmation could not be sent');
+        });
+      } else {
+        announce('Application saved as in progress on this device');
+      }
     } else {
       announce('This application is already in progress');
     }
